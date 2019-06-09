@@ -54,9 +54,10 @@ module Enumerable
   end
 
   def my_zip(*n)
-    return self.combination(1).to_a if n.count == 0
+    return combination(1).to_a if n.count.zero?
+
     counter = 0
-    arr = self.combination(1).to_a
+    arr = combination(1).to_a
     items = n.count
     while counter < arr.length
       other_counter = 0
@@ -73,45 +74,50 @@ module Enumerable
     arr = self
     if n.empty?
       rotate_once arr
-      arr
     else
       number = n[0].to_i
-      if number < 0
-        count = 0
+      count = 0
+      if number.negative?
         while count > number
           rotate_once_negative arr
           count -= 1
         end
-        arr
       else
-        count = 0
         while count < number
           rotate_once arr
           count += 1
         end
-        arr
       end
     end
+    arr
   end
 
   def my_join(*n)
+    text = ''
+    count = 0
     if n.empty?
-      text = ''
-      count = 0
-      while count < self.length
+      while count < length
         text += self[count]
         count += 1
       end
       text
     else
-      text = ''
-      count = 0
-      while count < self.length
+      while count < length
         text += self[count] + n[0].to_s
         count += 1
       end
       text.slice!(0...-1)
     end
+  end
+
+  def my_reverse
+    count = -1
+    arr = []
+    while count >= -1 * length
+      arr << self[count]
+      count -= 1
+    end
+    arr
   end
 
   private
@@ -149,20 +155,15 @@ module Enumerable
     results
   end
 
-  def rotate_once arr
+  def rotate_once(arr)
     aux = arr.shift
     arr << aux
     arr
   end
 
-  def rotate_once_negative arr
+  def rotate_once_negative(arr)
     aux = arr.pop
     arr.unshift(aux)
     arr
   end
-
 end
-
-a = [ "a", "b", "c", "d" ]
-p a.my_join         # => "abcd"
-p a.my_join("$")    # => "a$b$c$d"
