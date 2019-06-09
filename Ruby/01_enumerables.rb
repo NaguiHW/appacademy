@@ -94,6 +94,26 @@ module Enumerable
     end
   end
 
+  def my_join(*n)
+    if n.empty?
+      text = ''
+      count = 0
+      while count < self.length
+        text += self[count]
+        count += 1
+      end
+      text
+    else
+      text = ''
+      count = 0
+      while count < self.length
+        text += self[count] + n[0].to_s
+        count += 1
+      end
+      text.slice!(0...-1)
+    end
+  end
+
   private
 
   def recursive_flatten(array, results = [])
@@ -142,3 +162,7 @@ module Enumerable
   end
 
 end
+
+a = [ "a", "b", "c", "d" ]
+p a.my_join         # => "abcd"
+p a.my_join("$")    # => "a$b$c$d"
