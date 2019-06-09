@@ -69,7 +69,29 @@ module Enumerable
     arr
   end
 
-  def my_rotate
+  def my_rotate(*n)
+    arr = self
+    if n.empty?
+      rotate_once arr
+      arr
+    else
+      number = n[0].to_i
+      if number < 0
+        count = 0
+        while count > number
+          rotate_once_negative arr
+          count -= 1
+        end
+        arr
+      else
+        count = 0
+        while count < number
+          rotate_once arr
+          count += 1
+        end
+        arr
+      end
+    end
   end
 
   private
@@ -106,13 +128,17 @@ module Enumerable
     end
     results
   end
+
+  def rotate_once arr
+    aux = arr.shift
+    arr << aux
+    arr
+  end
+
+  def rotate_once_negative arr
+    aux = arr.pop
+    arr.unshift(aux)
+    arr
+  end
+
 end
-
-arr = [1, 2, 3, 4, 5]
-arr2 = [1, 2, 3, [4, [5, 6]], [[[7]], 8]]
-
-p ar = [].to_a
-p '=============================='
-p ['a', 'b', 'c'].my_zip([1], [1, 2], [1, 2, 3], ['a', 'b', 'c'])
-p '=============================='
-p ['a', 'b', 'c'].zip([1], [1, 2], [1, 2, 3], ['a', 'b', 'c'])
